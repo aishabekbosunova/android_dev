@@ -14,6 +14,11 @@ class PostServices{
     post.addLike((post.likeCount ?? 0) + 1);
   }
 
+  void unlikePost(PostModel post) {
+    final count = post.likeCount ?? 0;
+    post.addLike(count > 0 ? count - 1 : 0);
+  }
+
   void commentOnPost(PostModel post) {
     post.addComment((post.commentCount ?? 0) + 1);
   }
