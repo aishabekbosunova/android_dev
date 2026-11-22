@@ -1,3 +1,4 @@
+import 'package:android_dev/core/auth/auth_provider.dart';
 import 'package:android_dev/screens/home_screen/state/feed_controller.dart';
 import 'package:android_dev/screens/home_screen/services/local_data_service.dart';
 import 'package:android_dev/core/db/app_database.dart';
@@ -16,7 +17,7 @@ class ProfileTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final posts = ref.watch(feedPostsProvider);
     final profile = ref.watch(currentProfileProvider).asData?.value;
-    final nickname = profile?.nickname ?? 'alimhan';
+    final nickname = profile?.nickname ?? 'me';
     final avatarUrl = profile?.avatarUrl;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -26,6 +27,11 @@ class ProfileTab extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.edit_outlined),
             onPressed: () => _showEditProfile(context, ref, nickname, avatarUrl),
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Log out',
+            onPressed: () => ref.read(authProvider.notifier).logout(),
           ),
         ],
       ),

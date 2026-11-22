@@ -28,9 +28,11 @@ class _CommentsSheetState extends ConsumerState<CommentsSheet> {
   Future<void> _submit() async {
     final body = _controller.text.trim();
     if (body.isEmpty) return;
+    final profile = await ref.read(localDataServiceProvider).getProfile('me');
     await ref.read(localDataServiceProvider).addComment(
           postId: widget.postId,
           body: body,
+          authorName: profile?.nickname ?? 'me',
         );
     _controller.clear();
   }

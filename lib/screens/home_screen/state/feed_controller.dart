@@ -12,6 +12,7 @@ extension CachedPostMapper on CachedPost {
         authorName: authorName,
         likeCount: likes,
         isLiked: isLiked,
+        commentCount: commentCount,
       );
 }
 
@@ -31,15 +32,18 @@ class FeedController {
     if (post != null) await _localData.toggleLike(post);
   }
 
-  Future<void> createPost({required String imageUrl, required String caption}) {
+  Future<void> createPost({required String imageUrl, required String caption}) async {
+    final profile = await _localData.getProfile('me');
+    final authorName = profile?.nickname ?? 'me';
     final now = DateTime.now().microsecondsSinceEpoch;
     return _localData.savePost(
       CachedPostsCompanion.insert(
         id: 'post-$now',
         authorId: 'me',
-        authorName: 'alimhan',
+        authorName: authorName,
         imageUrl: imageUrl,
         caption: caption,
+        createdAt: Value(now),
       ),
     );
   }
