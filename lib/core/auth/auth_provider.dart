@@ -8,12 +8,14 @@ import '../db/database_provider.dart';
 String _hash(String password) =>
     sha256.convert(utf8.encode(password)).toString();
 
-class AuthNotifier extends StateNotifier<bool> {
-  AuthNotifier(this._db) : super(false) {
-    _init();
-  }
+class AuthNotifier extends Notifier<bool> {
+  AppDatabase get _db => ref.read(databaseProvider);
 
-  final AppDatabase _db;
+  @override
+  bool build() {
+    _init();
+    return false;
+  }
 
   /// On startup: check if there's an active session in the DB.
   Future<void> _init() async {
@@ -68,6 +70,4 @@ class AuthNotifier extends StateNotifier<bool> {
   }
 }
 
-final authProvider = StateNotifierProvider<AuthNotifier, bool>(
-  (ref) => AuthNotifier(ref.watch(databaseProvider)),
-);
+final authProvider = NotifierProvider<AuthNotifier, bool>(AuthNotifier.new);

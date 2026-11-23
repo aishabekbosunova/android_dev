@@ -37,10 +37,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final error = isRegister
         ? await auth.register(nickname, password)
         : await auth.login(nickname, password);
-    if (mounted) setState(() {
-      _loading = false;
-      _error = error;
-    });
+    if (mounted) {
+      setState(() {
+        _loading = false;
+        _error = error;
+      });
+    }
   }
 
   @override

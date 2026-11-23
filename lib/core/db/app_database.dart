@@ -46,29 +46,31 @@ class PostComments extends Table {
 @DriftDatabase(tables: [CachedPosts, UserProfiles, PostComments])
 class AppDatabase extends _$AppDatabase {
   AppDatabase()
-      : super(driftDatabase(
+    : super(
+        driftDatabase(
           name: 'social_app',
           native: const DriftNativeOptions(shareAcrossIsolates: true),
-        ));
+        ),
+      );
 
   @override
   int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-        onUpgrade: (m, from, to) async {
-          if (from < 2) {
-            await m.addColumn(cachedPosts, cachedPosts.commentCount);
-            await m.addColumn(cachedPosts, cachedPosts.createdAt);
-            await m.addColumn(userProfiles, userProfiles.bio);
-            await m.addColumn(userProfiles, userProfiles.email);
-            await m.addColumn(userProfiles, userProfiles.passwordHash);
-            await m.addColumn(userProfiles, userProfiles.isActive);
-            await m.addColumn(userProfiles, userProfiles.createdAt);
-            // Drop old raw-SQL table and recreate as a proper Drift table
-            await customStatement('DROP TABLE IF EXISTS post_comments');
-            await m.createTable(postComments);
-          }
-        },
-      );
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        await m.addColumn(cachedPosts, cachedPosts.commentCount);
+        await m.addColumn(cachedPosts, cachedPosts.createdAt);
+        await m.addColumn(userProfiles, userProfiles.bio);
+        await m.addColumn(userProfiles, userProfiles.email);
+        await m.addColumn(userProfiles, userProfiles.passwordHash);
+        await m.addColumn(userProfiles, userProfiles.isActive);
+        await m.addColumn(userProfiles, userProfiles.createdAt);
+        // Drop old raw-SQL table and recreate as a proper Drift table
+        await customStatement('DROP TABLE IF EXISTS post_comments');
+        await m.createTable(postComments);
+      }
+    },
+  );
 }
